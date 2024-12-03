@@ -1,4 +1,4 @@
 function Eta({ message }) {
-  return { message };
+  return <>{message}</>;
 }
 export default Eta;

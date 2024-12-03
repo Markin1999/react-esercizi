@@ -1,4 +1,4 @@
-import Eta from "./Componenti/eta";
+import Eta from "./eta";
 
 function Welcome({ name, age }) {
   const message = <p>La tua eta è:{age}</p>;
