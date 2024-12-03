@@ -16,7 +16,7 @@ function Welcome({ name, age }) {
       ) : age < 18 ? (
         <Messaggio eta={age} />
       ) : (
-        <h1>Accesso non consentito.</h1>
+        <h2>Accesso non consentito.</h2>
       )}
     </>
   );
