@@ -1,10 +1,16 @@
-export function Film(props) {
+export function Film({ aggiungiPreferiti, rimuoviPreferiti, titolo, stato }) {
   return (
     <li>
-      {props.titolo}
-      {props.stato} ? (
-      <button onClick={props.Add}>"Aggiungi ai preferiti"</button>):(
-      <button onClick={props.remove}>"Rimuovi dai preferiti"</button>)
+      {titolo}
+      {stato} ? (
+      <button onClick={() => aggiungiPreferiti(titolo)}>
+        "Aggiungi ai preferiti"
+      </button>
+      ):(
+      <button onClick={() => rimuoviPreferiti(titolo)}>
+        "Rimuovi dai preferiti"
+      </button>
+      )
     </li>
   );
 }

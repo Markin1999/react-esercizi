@@ -7,10 +7,14 @@ function App() {
   const [preferiti, setPreferiti] = useState([]);
   const filmArr = ["Matrix", "Inception", "Titanic", "Avengers"];
 
-  function aggiungiPreferito(array) {
-    if (!preferiti.includes(array)) {
-      setPreferiti([...preferiti, ...array]);
+  function aggiungiPreferito(film) {
+    if (!preferiti.includes(film)) {
+      setPreferiti([...preferiti, film]);
     }
+  }
+
+  function rimuoviPreferiti(film) {
+    setPreferiti(preferiti.filter((x) => x !== film));
   }
 
   return (
@@ -23,19 +27,25 @@ function App() {
               key={index}
               titolo={x}
               stato={preferiti.includes(x)}
-              add={aggiungiPreferito}
-              remove={rimuoviPreferiti}
+              add={() => aggiungiPreferito(x)}
+              a
+              remove={() => rimuoviPreferiti(x)}
             />
           </li>
         ))}
       </ul>
-      <ul>
-        {preferiti.length > 0 ? (
-          preferiti.map((x, index) => <li key={index}>{x}</li>)
-        ) : (
-          <p>Aggiungi ai preferiti</p>
-        )}
-      </ul>
+
+      {preferiti.length > 0 ? (
+        <ul>
+          (
+          {preferiti.map((x, index) => (
+            <li key={index}>{x}</li>
+          ))}
+          )
+        </ul>
+      ) : (
+        <p>Aggiungi ai preferiti</p>
+      )}
     </div>
   );
 }
