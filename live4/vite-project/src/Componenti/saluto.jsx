@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function Hello() {
   const [nome, setNome] = useState("");
-  const [email, setEmail] = useState((event) => {
-    event.target.value;
-  });
+  const [email, setEmail] = useState();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -12,6 +10,7 @@ export default function Hello() {
   }, [nome]);
 
   const handleChange = (event) => {
+    const value = event.target.value;
     if (value.length > 10) {
       setNome(value.toUpperCase());
     } else {
@@ -37,7 +36,7 @@ export default function Hello() {
       {!nome ? <p>Ciao, Ottavio</p> : <p>Ciao, {nome}</p>}
       <hr />
 
-      <input type="text" value={email} />
+      <input type="text" value={email} onChange={handleChangeemail} />
 
       <p>{error || email}</p>
       <button onClick={handlClickemail}> clicca </button>
