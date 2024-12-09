@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 
 export default function Hello() {
   const [nome, setNome] = useState("");
-  const [email, setEmail] = useState();
+  const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    console.log(nome);
-  }, [nome]);
+  const [button, setButton] = useState("false");
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -18,15 +15,18 @@ export default function Hello() {
     }
   };
 
-  const handlClickemail = (event) => {
+  const handleChangeemail = (event) => {
     const value = event.target.value;
+    setEmail(value);
+  };
+
+  const handlClickemail = () => {
+    setButton("true");
 
     if (!email.includes("@") || !email.includes(".")) {
       setError("Errore. Email non corretta");
     } else {
       setError("");
-
-      setEmail(value);
     }
   };
 
@@ -35,11 +35,9 @@ export default function Hello() {
       <input type="text" value={nome} onChange={handleChange} />
       {!nome ? <p>Ciao, Ottavio</p> : <p>Ciao, {nome}</p>}
       <hr />
-
       <input type="text" value={email} onChange={handleChangeemail} />
-
-      <p>{error || email}</p>
-      <button onClick={handlClickemail}> clicca </button>
+      <button value={button} onClick={handlClickemail}></button>
+      {button === "true" && <h1>{error || email}</h1>}
     </>
   );
 }
