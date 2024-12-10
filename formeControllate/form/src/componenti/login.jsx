@@ -23,25 +23,45 @@ export default function login() {
     setIsDisabled(username === "" || password === "");
   }, [data]);
 
+  function handleReset() {
+    setData({
+      username: "",
+      password: "",
+      email: "",
+    });
+  }
+
+  function handleLogin(event) {
+    event.preventDefault();
+  }
+
   return (
     <>
-      <input
-        type="username"
-        name="username"
-        id=""
-        value={data.username}
-        onChange={onChangeData}
-      />
-      <input
-        type="password"
-        name="password"
-        id=""
-        value={data.password}
-        onChange={onChangeData}
-      />
-      <input type="email" name="mail" id="" onChange={onChangeData} />
+      {" "}
+      <form action="" onSubmit={handleLogin}>
+        <input
+          type="username"
+          name="username"
+          id=""
+          value={data.username}
+          onChange={onChangeData}
+        />
+        <input
+          type="password"
+          name="password"
+          id=""
+          value={data.password}
+          onChange={onChangeData}
+        />
+        <input type="email" name="mail" id="" onChange={onChangeData} />
 
-      <button disabled={isDisabled}>Login</button>
+        <button type="onSubmit" disabled={isDisabled}>
+          Login
+        </button>
+        <button type="button" onClick={handleReset}>
+          Reset
+        </button>
+      </form>
     </>
   );
 }
