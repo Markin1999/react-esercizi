@@ -23,6 +23,7 @@ export default function Registrazione() {
       !/[!@#$%^&*()]/.test(password)
     ) {
       setError("La password è troppo corta");
+      passwordRef.current.value = "";
     } else {
       setError("");
     }
@@ -33,25 +34,32 @@ export default function Registrazione() {
         nome: nome,
         cognome: cognome,
         mail: mail,
+        password: password,
       },
     ];
+
+    const existUser = localStorage.getItem("user");
+
+    if (existUser) {
+      const parseExistUser = JSON.parse(existUser);
+      const emailExists = parseExistUser.some((user) => user.mail === mail);
+      if (emailExists) {
+        setError("Email gia registrata");
+        return;
+      }
+    }
 
     setData(updatedData);
 
     if (!error) {
       localStorage.setItem("user", JSON.stringify(updatedData));
     }
+
+    nomeRef.current.value = "";
+    mailRef.current.value = "";
+    cognomeRef.current.value = "";
+    passwordRef.current.value = "";
   };
-
-  const existUser = localStorage.getItem("user");
-
-  if (existUser) {
-    const parseExistUser = JSON.parse(existUser); //diventa oggetto
-    if (parseExistUser.mail === data.mail) {
-      setError("mail gia registrata");
-      return;
-    }
-  }
 
   return (
     <>
@@ -70,9 +78,7 @@ export default function Registrazione() {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button disabled={error ? true : false} type="submit">
-          invia
-        </button>
+        <button type="submit">invia</button>
       </form>
     </>
   );
