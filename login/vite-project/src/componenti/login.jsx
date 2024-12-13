@@ -19,7 +19,7 @@ export default function Login() {
     const parseUsers = JSON.parse(users); //trasformato in oggetto
 
     const userExist = parseUsers.some(
-      (x) => x.email === data.email && x.password === data.password
+      (x) => x.mail === data.email && x.password === data.password
     );
 
     if (userExist) {
