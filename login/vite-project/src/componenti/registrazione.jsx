@@ -1,85 +1,113 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-export default function Registrazione() {
-  const [error, setError] = useState("");
-  const [data, setData] = useState([]);
+export function Registrazione() {
+  const [data, setData] = useState({
+    nome: "",
+    cognome: "",
+    email: "",
+    password: "",
+  });
+  const [errore, setErrore] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
 
-  const nomeRef = useRef(null);
-  const cognomeRef = useRef(null);
-  const mailRef = useRef(null);
-  const passwordRef = useRef(null);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "password") {
+      if (
+        value.length < 6 ||
+        !/\d/.test(value) ||
+        !/[!@#$%^&*()]/.test(value)
+      ) {
+        setErrore(
+          "La password deve contenere almeno sei caratteri di cui almeno un carattere speciale e una lettera maiuscola"
+        );
+      } else {
+        setErrore("");
+      }
+    }
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (errore) return;
+    const existData = localStorage.getItem("userDatabase");
+    let utentiRegistrati = [];
 
-    const nome = nomeRef.current.value;
-    const mail = mailRef.current.value;
-    const cognome = cognomeRef.current.value;
-    const password = passwordRef.current.value;
-
-    if (
-      password.length < 6 &&
-      !/\d/.test(password) &&
-      !/[!@#$%^&*()]/.test(password)
-    ) {
-      setError("La password è troppo corta");
-      passwordRef.current.value = "";
-    } else {
-      setError("");
+    // verifica se esiste l'array vuoto
+    if (existData) {
+      utentiRegistrati = JSON.parse(existData);
     }
 
-    const updatedData = [
-      ...data,
-      {
-        nome: nome,
-        cognome: cognome,
-        mail: mail,
-        password: password,
-      },
-    ];
+    // verifica se l'email esiste o no
+    const existEmail = utentiRegistrati.some((x) => x.email === data.email);
 
-    const existUser = localStorage.getItem("user");
-
-    if (existUser) {
-      const parseExistUser = JSON.parse(existUser);
-      const emailExists = parseExistUser.some((user) => user.mail === mail);
-      if (emailExists) {
-        setError("Email gia registrata");
-        return;
-      }
+    // verifica se l'email non esiste
+    if (existEmail) {
+      setErrorEmail("Email già registrata");
+      return;
     }
 
-    setData(updatedData);
-
-    if (!error) {
-      localStorage.setItem("user", JSON.stringify(updatedData));
-    }
-
-    nomeRef.current.value = "";
-    mailRef.current.value = "";
-    cognomeRef.current.value = "";
-    passwordRef.current.value = "";
+    utentiRegistrati.push(data);
+    localStorage.setItem("userDatabase", JSON.stringify(utentiRegistrati));
+    setData({
+      nome: "",
+      cognome: "",
+      email: "",
+      password: "",
+    });
+    console.log("hai cliccato submit");
   };
 
   return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "5px" }}
-      >
-        <label htmlFor="nome">Nome:</label>
-        <input type="text" name="nome" ref={nomeRef} />
-        <label htmlFor="cognome">Cognome:</label>
-        <input type="text" name="cognome" ref={cognomeRef} />
-        <label htmlFor="email">E-mail:</label>
-        <input type="email" name="mail" ref={mailRef} />
-        <label htmlFor="password">Password:</label>
-        <input type="password" name="password" ref={passwordRef} id="" />
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        <button type="submit">invia</button>
+    <div>
+      <form className="registrazione" onSubmit={handleSubmit}>
+        <label htmlFor="Nome">Nome</label>
+        <input
+          type="text"
+          name="nome"
+          id="nome"
+          placeholder="Nome..."
+          onChange={handleChange}
+          value={data.nome}
+        />
+        <label htmlFor="Cognome">Cognome</label>
+        <input
+          type="text"
+          name="cognome"
+          id="cognome"
+          placeholder="Cognome..."
+          onChange={handleChange}
+          value={data.cognome}
+        />
+        <label htmlFor="email">email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Email..."
+          onChange={handleChange}
+          value={data.email}
+        />
+        <label htmlFor="Password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password..."
+          onChange={handleChange}
+          value={data.password}
+        />
+        {errore && <p style={{ color: "red" }}> {errore}</p>}
+        {errorEmail && <p style={{ color: "red" }}> {errorEmail}</p>}
+        <button disabled={errore ? true : false} type="submit">
+          {" "}
+          Registrati
+        </button>
       </form>
-    </>
+    </div>
   );
 }

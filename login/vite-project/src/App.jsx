@@ -1,17 +1,20 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
 import "./App.css";
-import Registrazione from "./componenti/registrazione";
-import Login from "./componenti/login";
+import { Dashboard } from "./componenti/Dashboard";
+import { Login } from "./componenti/Login";
+import { Registrazione } from "./componenti/Registrazione";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [isLogged, setIsLogged] = useState(null);
+  const log = localStorage.getItem("isLogged");
+  useEffect(() => {
+    setIsLogged(log);
+  }, []);
 
   return (
     <>
       <Registrazione />
-      <Login />
+      {isLogged === "true" ? <Dashboard /> : <Login />}
     </>
   );
 }

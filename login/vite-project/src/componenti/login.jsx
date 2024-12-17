@@ -1,44 +1,43 @@
 import { useState } from "react";
 
-export default function Login() {
+export function Login() {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
   const [messaggio, setMessaggio] = useState("");
 
-  const handleChange = (event) => {
+  function handleChange(event) {
     const { name, value } = event.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  }
 
-  const handleSubmit = (event) => {
+  function handleLogin(event) {
     event.preventDefault();
-    const users = localStorage.getItem("user"); //dobbiamo ancora trasformarlo in oggetto
-
-    const parseUsers = JSON.parse(users); //trasformato in oggetto
-
-    const userExist = parseUsers.some(
-      (x) => x.mail === data.email && x.password === data.password
+    const userDatabase = localStorage.getItem("users");
+    const parseUsers = JSON.parse(userDatabase);
+    const userExist = parseUsers.find(
+      (x) => x.email === data.email && x.password === data.password
     );
-
     if (userExist) {
-      setMessaggio("login effettuato con successo");
+      setMessaggio("Login effettuato con successo");
+      // eslint-disable-next-line no-unused-vars
       const isLogged = localStorage.setItem("isLogged", true);
+      localStorage.setItem("userExist", JSON.stringify(userExist));
     } else {
-      setMessaggio("credenziali errate");
+      setMessaggio("Credenziali errate");
     }
-  };
+  }
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <label htmlFor="email">Email:</label>
         <input type="email" name="email" onChange={handleChange} />
         <label htmlFor="password">Password:</label>
         <input type="password" name="password" onChange={handleChange} />
-        <button type="submit"></button>
-        {messaggio && <p>{messaggio}</p>}
+        <button type="submit">Login</button>
+        {messaggio && <p style={{ color: "red" }}>{messaggio}</p>}
       </form>
     </>
   );
