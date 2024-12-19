@@ -1,10 +1,9 @@
-export function Dashboard() {
+export function Dashboard({ setIsLogged }) {
   const user = localStorage.getItem("userExist");
   const userParse = JSON.parse(user);
 
   function handleLogout() {
-    localStorage.setItem("isLogged", "");
-    localStorage.removeItem("userExist");
+    setIsLogged(false);
   }
 
   return (

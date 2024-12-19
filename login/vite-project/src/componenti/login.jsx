@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-export function Login() {
+export default function Log({ setIsLogged }) {
   const [data, setData] = useState({
     email: "",
     password: "",
   });
+
   const [messaggio, setMessaggio] = useState("");
+  const { login } = useContext(userContext);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -21,8 +23,7 @@ export function Login() {
     );
     if (userExist) {
       setMessaggio("Login effettuato con successo");
-      // eslint-disable-next-line no-unused-vars
-      const isLogged = localStorage.setItem("isLogged", true);
+      login(userExist);
       localStorage.setItem("userExist", JSON.stringify(userExist));
     } else {
       setMessaggio("Credenziali errate");
